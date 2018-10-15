@@ -1,15 +1,17 @@
 import csv
 
 from django.http import StreamingHttpResponse
-import mysql.connector
 from django.http import HttpResponse
 import json
+import _mysql
 
-cnx = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="hanoi@1993"
-)
+
+
+db=_mysql.connect(host="127.0.0.1",user="useradvdb",
+                  passwd="tydHQDP^^###!!18100108",db="adv")
+
+
+
 
 
 class Echo:
@@ -21,13 +23,9 @@ class Echo:
         return value
 
 def get_file():
-
-
-    cursor = cnx.cursor()
-
-    query = ("SELECT *  FROM sys.mkt ")
-    cursor.execute(query)
-    rows = ([id, sdt, facebook] for (id, sdt, facebook) in cursor)
+    db.query("""SELECT id, sdt, facebook from mkt limit 50""")
+    r = db.store_result()
+    rows = r.fetch_row(0)
 
     # cursor.close()
     return list(rows)
